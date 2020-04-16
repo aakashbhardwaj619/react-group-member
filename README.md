@@ -2,7 +2,7 @@
 
 ## Summary
 
-This web part can be used to find all the groups a user is part of or all the members present in a group. It can be used as an admin utility to quickly check the membership of any user or group from within a SharePoint page itself.
+This web part can be used to find all the groups a user is part of or all the members present in a group. It can be used as an admin utility to quickly check the membership of any user or group from within a SharePoint page itself
 
 ### Building the code
 
