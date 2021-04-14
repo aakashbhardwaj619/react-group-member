@@ -71,10 +71,10 @@ stages:
           inputs:
             targetType: "inline"
             script: |
-              $securePassword = ConvertTo-SecureString $(spPassword) -AsPlainText -Force
-              $credential = New-Object System.Management.Automation.PSCredential -ArgumentList $(spUsername), $securePassword
+              $securePassword = ConvertTo-SecureString ${env:SPPASSWORD} -AsPlainText -Force
+              $credential = New-Object System.Management.Automation.PSCredential -ArgumentList ${env:SPUSERNAME}, $securePassword
               Write-Host 'Connect to sharepoint'
-              Connect-PnPOnline -Url https://$(spDomain).sharepoint.com/sites/appcatalog -Credentials $credential
+              Connect-PnPOnline -Url https://${env:SPDOMAIN}.sharepoint.com/sites/appcatalog -Credentials $credential
               Write-Host 'Add app to AppCatalog and publish'
               Write-Host 'Artifact Folder:' $(System.ArtifactsDirectory)
               
@@ -96,10 +96,10 @@ stages:
           inputs:
             targetType: "inline"
             script: |
-              $securePassword = ConvertTo-SecureString $(spPassword) -AsPlainText -Force
-              $credential = New-Object System.Management.Automation.PSCredential -ArgumentList $(spUsername), $securePassword
+              $securePassword = ConvertTo-SecureString ${env:SPPASSWORD} -AsPlainText -Force
+              $credential = New-Object System.Management.Automation.PSCredential -ArgumentList ${env:SPUSERNAME}, $securePassword
               Write-Host 'Connect to sharepoint'
-              Connect-PnPOnline -Url https://$(spDomain).sharepoint.com/sites/appcatalog -Credentials $credential
+              Connect-PnPOnline -Url https://${env:SPDOMAIN}.sharepoint.com/sites/appcatalog -Credentials $credential
               Write-Host 'Add app to AppCatalog and publish'
               Write-Host 'Artifact Folder:' $(System.ArtifactsDirectory)
               
