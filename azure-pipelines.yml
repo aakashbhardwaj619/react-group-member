@@ -58,28 +58,32 @@ stages:
   - stage: DeployDevelopment
     dependsOn: Build
     jobs:
-      - job: DeployDev
-        steps:
-        - task: DownloadBuildArtifacts@0
-          displayName: Download Build Artifacts
-          inputs:
-            artifactName: drop
-            downloadPath: "$(System.ArtifactsDirectory)"
+      - deployment: DeployDev
+        environment: dev
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - task: DownloadBuildArtifacts@0
+                displayName: Download Build Artifacts
+                inputs:
+                  artifactName: drop
+                  downloadPath: "$(System.ArtifactsDirectory)"
 
-        - task: PowerShell@2
-          displayName: "Publish SPFX App"
-          inputs:
-            targetType: "inline"
-            script: |
-              $securePassword = ConvertTo-SecureString ${env:SPPASSWORD} -AsPlainText -Force
-              $credential = New-Object System.Management.Automation.PSCredential -ArgumentList ${env:SPUSERNAME}, $securePassword
-              Write-Host 'Connect to sharepoint'
-              Connect-PnPOnline -Url https://${env:SPDOMAIN}.sharepoint.com/sites/appcatalog -Credentials $credential
-              Write-Host 'Add app to AppCatalog and publish'
-              Write-Host 'Artifact Folder:' $(System.ArtifactsDirectory)
-              
-              Add-PnPApp -Path $(System.ArtifactsDirectory)/drop/react-group-member.sppkg -Overwrite -Publish
-              
+              - task: PowerShell@2
+                displayName: "Publish SPFX App"
+                inputs:
+                  targetType: "inline"
+                  script: |
+                    $securePassword = ConvertTo-SecureString ${env:SPPASSWORD} -AsPlainText -Force
+                    $credential = New-Object System.Management.Automation.PSCredential -ArgumentList ${env:SPUSERNAME}, $securePassword
+                    Write-Host 'Connect to sharepoint'
+                    Connect-PnPOnline -Url https://${env:SPDOMAIN}.sharepoint.com/sites/appcatalog -Credentials $credential
+                    Write-Host 'Add app to AppCatalog and publish'
+                    Write-Host 'Artifact Folder:' $(System.ArtifactsDirectory)
+                    
+                    Add-PnPApp -Path $(System.ArtifactsDirectory)/drop/react-group-member.sppkg -Overwrite -Publish
+                  
   - stage: DeployTest
     dependsOn: Build
     jobs:
